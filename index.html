@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notizie Sportive in Tempo Reale</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header con il Selettore delle Sezioni -->
+  <header>
+    <h1>Notizie Sportive in Tempo Reale</h1>
+    <div class="section-selector">
+      <a href="#home" class="active" data-category="home"><img src="icone/home.png" alt="Home" /></a>
+      <a href="#calcio" data-category="calcio"><img src="icone/calcio.png" alt="Calcio" /></a>
+      <a href="#nuoto" data-category="nuoto"><img src="icone/nuoto.png" alt="Nuoto" /></a>
+      <a href="#tennis" data-category="tennis"><img src="icone/tennis.png" alt="Tennis" /></a>
+      <a href="#basket" data-category="basket"><img src="icone/basket.png" alt="Basket" /></a>
+      <a href="#formula1" data-category="formula1"><img src="icone/formula 1.png" alt="Formula 1" /></a>
+      <a href="#equitazione" data-category="equitazione"><img src="icone/equitazione.png" alt="Equitazione" /></a>
+      <a href="#atletica" data-category="atletica"><img src="icone/atletica.png" alt="Atletica" /></a>
+    </div>
+  </header>
+
+  <!-- Homepage con Slider + Notizie Eclatanti -->
+  <section id="home" class="page active">
+    <div class="slider">
+      <div class="slide active" style="background-image: url('slider1.jpg');">
+        <h2>Notizia 1</h2>
+      </div>
+      <div class="slide" style="background-image: url('slider2.jpg');">
+        <h2>Notizia 2</h2>
+      </div>
+      <div class="slide" style="background-image: url('slider3.jpg');">
+        <h2>Notizia 3</h2>
+      </div>
+    </div>
+
+    <div class="featured-news">
+      <div class="news-item">
+        <img src="img/eclatante1.jpg" alt="Notizia 1">
+        <h3>Titolo Notizia 1</h3>
+      </div>
+      <div class="news-item">
+        <img src="img/eclatante2.jpg" alt="Notizia 2">
+        <h3>Titolo Notizia 2</h3>
+      </div>
+      <div class="news-item">
+        <img src="img/eclatante3.jpg" alt="Notizia 3">
+        <h3>Titolo Notizia 3</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sezione Calcio -->
+  <section id="calcio" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Calcio</h2>
+    <div class="news-grid" id="calcio-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+  <!-- Sezione Nuoto -->
+  <section id="nuoto" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Nuoto</h2>
+    <div class="news-grid" id="nuoto-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+  <!-- Sezione Tennis -->
+  <section id="tennis" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Tennis</h2>
+    <div class="news-grid" id="tennis-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+  <!-- Sezione Basket -->
+  <section id="basket" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Basket</h2>
+    <div class="news-grid" id="basket-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+  <!-- Sezione Formula 1 -->
+  <section id="formula1" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Formula 1</h2>
+    <div class="news-grid" id="formula1-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+  <!-- Sezione Equitazione -->
+  <section id="equitazione" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Equitazione</h2>
+    <div class="news-grid" id="equitazione-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+  <!-- Sezione Atletica -->
+  <section id="atletica" class="page">
+    <button onclick="navigateHome()" class="home-button">🏠</button>
+    <h2>Notizie di Atletica</h2>
+    <div class="news-grid" id="atletica-news">
+      <p class="no-news-message">Nessuna notizia disponibile al momento.</p>
+    </div>
+  </section>
+
+    <!-- Collegamento al file JavaScript -->
+  <script src="script.js"></script> <!-- Rimuovi o commenta se non serve -->
+
+  <script>
+    function navigateHome() {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => page.classList.remove('active'));
+
+      const homePage = document.getElementById('home');
+      homePage.classList.add('active');
+
+      const links = document.querySelectorAll('.section-selector a');
+      links.forEach(link => link.classList.remove('active'));
+      const homeLink = document.querySelector('.section-selector a[data-category="home"]');
+      if (homeLink) homeLink.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('.section-selector a');
+
+      links.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const category = link.getAttribute('data-category');
+
+          const pages = document.querySelectorAll('.page');
+          pages.forEach(page => page.classList.remove('active'));
+
+          const pageToShow = document.getElementById(category);
+          if (pageToShow) pageToShow.classList.add('active');
+
+          links.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
