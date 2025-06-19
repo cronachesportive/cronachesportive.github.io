@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const pages = document.querySelectorAll(".page");
 
   const categoryQueries = {
-    home: "", // sarà filtrata a parte
+    home: "", // non usata direttamente
     calcio: "calcio OR football OR soccer",
     nuoto: "nuoto OR swimming",
     tennis: "tennis",
@@ -29,34 +29,54 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(`#${category} .news-grid`);
     container.innerHTML = "Caricamento notizie...";
 
-    const query = categoryQueries[category] || "";
-
     if (category === "home") {
-      const allCategories = Object.keys(categoryQueries).filter(cat => cat !== "home");
-      const promises = allCategories.map(cat => getNews(cat, 1));
-      const results = (await Promise.all(promises)).flat().slice(0, 3);
+      // Per la home: fetch paralleli per ogni categoria sportiva
+      const sportCategories = Object.keys(categoryQueries).filter(cat => cat !== "home");
 
-      if (results.length === 0) {
-        container.innerHTML = "<p>Nessuna notizia disponibile.</p>";
-        return;
+      try {
+        // Prendo fino a 3 articoli per categoria
+        const promises = sportCategories.map(cat => getNews(cat, 3));
+        const results = await Promise.all(promises);
+
+        // Unisco tutte le notizie in un unico array
+        let allArticles = results.flat();
+
+        // Ordino per data decrescente (se disponibile)
+        allArticles.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || 0);
+          const dateB = new Date(b.publishedAt || 0);
+          return dateB - dateA;
+        });
+
+        // Prendo massimo 9 notizie in home
+        allArticles = allArticles.slice(0, 3);
+
+        if (allArticles.length === 0) {
+          container.innerHTML = "<p>Nessuna notizia disponibile.</p>";
+          return;
+        }
+
+        container.innerHTML = "";
+        allArticles.forEach(article => {
+          const newsDiv = document.createElement("div");
+          newsDiv.classList.add("news-item");
+
+          newsDiv.innerHTML = `
+            <img src="${article.image || DEFAULT_IMG}" alt="Immagine notizia" onerror="this.src='${DEFAULT_IMG}'"/>
+            <h3>${article.title || "Titolo non disponibile"}</h3>
+            <p>${article.description || "Descrizione non disponibile."}</p>
+            <a href="${article.url}" target="_blank" rel="noopener noreferrer">Leggi di più</a>
+          `;
+          container.appendChild(newsDiv);
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento delle notizie sportive per home:", error);
+        container.innerHTML = "<p>Errore nel caricamento delle notizie.</p>";
       }
-
-      container.innerHTML = "";
-      results.forEach(article => {
-        const newsDiv = document.createElement("div");
-        newsDiv.classList.add("news-item");
-
-        newsDiv.innerHTML = `
-          <img src="${article.image || DEFAULT_IMG}" alt="Immagine notizia" onerror="this.src='${DEFAULT_IMG}'"/>
-          <h3>${article.title || "Titolo non disponibile"}</h3>
-          <p>${article.description || "Descrizione non disponibile."}</p>
-          <a href="${article.url}" target="_blank" rel="noopener noreferrer">Leggi di più</a>
-        `;
-        container.appendChild(newsDiv);
-      });
       return;
     }
 
+    // Per le altre categorie
     const articles = await getNews(category, 10);
     if (articles.length === 0) {
       container.innerHTML = "<p>Nessuna notizia disponibile per questa categoria.</p>";
